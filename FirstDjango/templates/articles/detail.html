@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} {{article.article_title}} {% endblock %}
+
+{% block content %}
+<h2>{{article.article_title}}</h2>
+<p>{{article.article_text}}</p>
+<p><i>{{article.pub_date}}</i></p>
+
+{% if article.was_published_recently %}
+НОВАЯ СТАТЬЯ
+{% endif %}
+
+<hr>
+
+{% if last_comments_list %}
+    {% for c in last_comments_list %}
+        <p>
+            <strong>{{c.author_name}}</strong><br>
+            <i>{{c.comment_text}}</i>
+        </p>
+    {% endfor %}
+{% else %}
+Comments are not found. Be the first!
+{% endif %}
+
+<hr>
+
+<form action="{% url 'articles:put_comment' article.id %}" method="post">
+
+    {% csrf_token %}
+
+    <input type="text" required placeholder="Your name" name="name"><br>
+    <textarea name="text" required placeholder="Text of Comment" cols="30" rows="10"></textarea><br>
+    <button type="submit">PUT COMMENT</button>
+
+</form>
+{% endblock %}
